@@ -39,7 +39,18 @@ class Table:
     def save(self, path: str):
         with open(path, 'w') as file:
             file.write(self.text())
+    
 
+    @staticmethod
+    def load(path: str, name, currency) -> 'Table':
+        with open(path, 'r') as file:
+            rows = file.readlines()
+            rows = rows[1:]
+            rows = [row.split(',') for row in rows]
+            rows = [Row(datetime.strptime(row[0], '%d-%m-%Y'), row[1], row[2], float(row[3]), float(row[4])) for row in rows]
+
+        return Table(rows, name, currency)
+       
     def get_date(self) -> list:
         days = []
         for row in self.rows:
