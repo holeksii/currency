@@ -20,13 +20,3 @@ class Row:
         date = self.date.strftime('%d-%m-%Y')
         return f'{date},{self.from_},{self.to},{self.buy},{self.sell}'
 
-
-if __name__ == "__main__":
-    d = datetime(2020,2,2)
-    # date to int
-    print(d.timestamp())
-
-    dint = int(d.timestamp())
-
-    # int to date
-    print(datetime.fromtimestamp(dint))

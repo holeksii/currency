@@ -23,57 +23,45 @@ def estimate_coef(x, y):
 
   
 
-def plot_regression_line(days, y, b): 
+def plot_regression_line(days, y, b, currency, name): 
     X = []
     Y = []
     for i in range(len(days)):
         X.append(datetime.fromtimestamp(days[i]))
         Y.append(y[i])
-    
-    # add pred days and prices to plot
 
     for i in range(len(days)):
         X.append(X[-1]+ timedelta(days=1))
         Y.append(b[0] + b[1]*X[-1].timestamp())
 
-    # plotting the actual points as scatter plot 
-    plt.scatter(X, Y, color = "m", marker = "o", s = 15) 
-    # predicted response vector 
+    plt.scatter(X, Y, color = "b", marker = "o", s = 15) 
 
+    days2 = []
+    for i in range(len(X)):
+        days2.append(X[i].timestamp())
     
-    
+    days = np.array(days2)
+
+
     y_pred = b[0] + b[1]*days
-    # plotting the regression line
+
     plt.plot(X, y_pred, color = "r")
-    # function to show plot 
+
+    plt.gcf().autofmt_xdate()
+    plt.title('Linear Regression Prediction for ' + name + ' ' + currency)
+    plt.ylabel('price')
+    plt.xlabel('date')
+    fig = plt.gcf()
+    fig.set_size_inches(7, 7)
     plt.show() 
-    input()
+ 
 
-  
-def main(): 
 
-    # observations / data 
+def show_prices_plot_linear(table):
+    days = np.array(table.get_days())
+    prices = np.array(table.get_prices())
+    k = estimate_coef(days, prices)
+    currency = table.currency
+    name = table.name
 
-    x = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) 
-
-    y = np.array([1, 3, 2, 5, 7, 8, 8, 9, 10, 12]) 
-
-  
-
-    # estimating coefficients 
-
-    b = estimate_coef(x, y) 
-
-    print("Estimated coefficients:\nb_0 = {} \nb_1 = {}".format(b[0], b[1])) 
-
-  
-
-    # plotting regression line 
-
-    plot_regression_line(x, y, b) 
-
-  
-
-if __name__ == "__main__": 
-
-    main() 
+    plot_regression_line(days, prices, k, currency, name)
